@@ -133,28 +133,43 @@ wss.on('connection', (ws) => {
         type: 'ai_response_end'
       }));
 
-      // Now generate speech for the COMPLETE response using AI SDK
+      // Now generate speech with STREAMING for low latency
       if (fullResponse.trim() && isAISpeaking) {
-        console.log('🔊 Generating speech for complete response');
+        console.log('🔊 Generating speech with streaming...');
 
         try {
-          // Use AI SDK's generateSpeech with OpenAI TTS
-          const audio = await generateSpeech({
-            model: openaiProvider.speech('tts-1'),
-            text: fullResponse.trim(),
-            voice: 'alloy', // Options: alloy, echo, fable, onyx, nova, shimmer
+          // Use OpenAI directly for streaming audio
+          const OpenAI = require('openai');
+          const openaiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+          const mp3Stream = await openaiClient.audio.speech.create({
+            model: 'tts-1',
+            voice: 'alloy',
+            input: fullResponse.trim(),
+            response_format: 'mp3',
           });
 
-          // Get the audio data from the Uint8Array
-          const audioBuffer = Buffer.from(audio.audio.uint8ArrayData);
+          console.log('🎵 Streaming audio chunks to client...');
+          let chunkCount = 0;
 
-          console.log(`✅ Speech generation complete: ${audioBuffer.length} bytes total`);
+          // Stream audio chunks as they arrive
+          for await (const chunk of mp3Stream) {
+            if (!isAISpeaking) {
+              console.log('⚠️ Audio streaming interrupted');
+              break;
+            }
 
-          // Send complete audio as single chunk
-          ws.send(JSON.stringify({
-            type: 'audio_chunk',
-            audio: audioBuffer.toString('base64')
-          }));
+            chunkCount++;
+            // Send each chunk immediately
+            ws.send(JSON.stringify({
+              type: 'audio_chunk',
+              audio: chunk.toString('base64'),
+              isStreaming: true,
+              chunkIndex: chunkCount
+            }));
+          }
+
+          console.log(`✅ Streamed ${chunkCount} audio chunks`);
 
         } catch (ttsError) {
           console.error('TTS error:', ttsError);

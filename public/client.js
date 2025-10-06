@@ -203,12 +203,22 @@ function connectWebSocket() {
       if (isCollectingAudio) {
         audioChunks.push(data.audio);
         console.log(`📦 Received audio chunk ${audioChunks.length}`);
+
+        // If streaming, start playing as soon as we have the first chunk
+        if (data.isStreaming && audioChunks.length === 1) {
+          console.log('🎵 Starting streaming audio playback...');
+          playStreamingAudio();
+        }
       }
 
     } else if (data.type === 'audio_end') {
-      console.log(`🔊 Playing complete audio (${audioChunks.length} chunks)`);
+      console.log(`🔊 Audio stream complete (${audioChunks.length} chunks)`);
       isCollectingAudio = false;
-      playCompleteAudio();
+
+      // If not already playing, play the complete audio
+      if (!isAIPlaying) {
+        playCompleteAudio();
+      }
 
     } else if (data.type === 'interrupt_ai') {
       console.log('🛑 AI interrupted by server');
@@ -334,7 +344,148 @@ function finishAIResponseStreaming() {
   transcriptEl.parentElement.scrollTop = transcriptEl.parentElement.scrollHeight;
 }
 
-// Audio playback - collect all chunks then play as single audio
+// Streaming audio playback - start playing immediately as chunks arrive
+function playStreamingAudio() {
+  if (audioChunks.length === 0) {
+    console.log('No audio chunks to play');
+    return;
+  }
+
+  try {
+    console.log('🎵 Starting immediate playback with streaming...');
+
+    // Use MediaSource API for true streaming
+    if ('MediaSource' in window) {
+      const mediaSource = new MediaSource();
+      const url = URL.createObjectURL(mediaSource);
+      currentAudioElement = new Audio(url);
+
+      mediaSource.addEventListener('sourceopen', () => {
+        const sourceBuffer = mediaSource.addSourceBuffer('audio/mpeg');
+        let bufferQueue = [];
+        let isUpdating = false;
+
+        const processQueue = () => {
+          if (!isUpdating && bufferQueue.length > 0 && !sourceBuffer.updating) {
+            isUpdating = true;
+            const chunk = bufferQueue.shift();
+            try {
+              sourceBuffer.appendBuffer(chunk);
+            } catch (e) {
+              console.error('Error appending buffer:', e);
+              isUpdating = false;
+            }
+          }
+        };
+
+        sourceBuffer.addEventListener('updateend', () => {
+          isUpdating = false;
+          processQueue();
+
+          // End stream when all chunks processed and no more collecting
+          if (!isCollectingAudio && bufferQueue.length === 0 && mediaSource.readyState === 'open') {
+            try {
+              mediaSource.endOfStream();
+            } catch (e) {
+              console.log('Stream already ended');
+            }
+          }
+        });
+
+        // Add current chunks to queue
+        audioChunks.forEach(chunk => {
+          const binaryString = atob(chunk);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          bufferQueue.push(bytes);
+        });
+
+        processQueue();
+
+        // Monitor for new chunks
+        const checkInterval = setInterval(() => {
+          if (audioChunks.length > bufferQueue.length) {
+            const newChunks = audioChunks.slice(bufferQueue.length);
+            newChunks.forEach(chunk => {
+              const binaryString = atob(chunk);
+              const bytes = new Uint8Array(binaryString.length);
+              for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+              }
+              bufferQueue.push(bytes);
+            });
+            processQueue();
+          }
+
+          if (!isCollectingAudio && bufferQueue.length === 0) {
+            clearInterval(checkInterval);
+          }
+        }, 100);
+      });
+
+      setupAudioElement();
+      isAIPlaying = true;
+      currentAudioElement.play().catch(err => {
+        console.error('Play error:', err);
+        isAIPlaying = false;
+      });
+
+      startWordHighlighting();
+
+    } else {
+      // Fallback: play complete audio if MediaSource not supported
+      playCompleteAudio();
+    }
+
+  } catch (error) {
+    console.error('Error starting streaming audio:', error);
+    // Fallback to complete playback
+    playCompleteAudio();
+  }
+}
+
+// Setup audio element event handlers
+function setupAudioElement() {
+  if (!currentAudioElement) return;
+
+  currentAudioElement.addEventListener('loadeddata', () => {
+    console.log('Audio loaded, duration:', currentAudioElement.duration);
+  });
+
+  currentAudioElement.addEventListener('canplaythrough', () => {
+    console.log('Audio can play through');
+  });
+
+  currentAudioElement.onended = () => {
+    console.log('✅ Audio playback finished');
+    currentAudioElement = null;
+    isAIPlaying = false;
+
+    // Clear word highlighting
+    if (wordHighlightInterval) {
+      clearInterval(wordHighlightInterval);
+      wordHighlightInterval = null;
+    }
+
+    // Remove highlight from all words
+    if (currentAIResponseDiv) {
+      const words = currentAIResponseDiv.querySelectorAll('.ai-word');
+      words.forEach(word => {
+        word.className = 'ai-word transition-all duration-100';
+      });
+    }
+  };
+
+  currentAudioElement.onerror = (e) => {
+    console.error('Audio playback error:', e, currentAudioElement.error);
+    currentAudioElement = null;
+    isAIPlaying = false;
+  };
+}
+
+// Audio playback - collect all chunks then play as single audio (fallback)
 function playCompleteAudio() {
   if (audioChunks.length === 0) {
     console.log('No audio chunks to play');
