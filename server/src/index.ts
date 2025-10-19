@@ -16,15 +16,6 @@ app.get('/health', (req: Request, res: Response) => {
     status: 'ok',
     timestamp: new Date().toISOString(),
     service: 'ai-receptionist-server',
-    version: '0.1.0',
-  });
-});
-
-// Root endpoint
-app.get('/', (req: Request, res: Response) => {
-  res.json({
-    message: 'AI Receptionist Server',
-    version: '0.1.0',
   });
 });
 
