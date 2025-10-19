@@ -1,9 +1,13 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
+import path from 'path';
+
+// Load environment variables from the server directory FIRST
+dotenv.config({ path: path.join(__dirname, '../.env') });
+
+// Now import the config after env vars are loaded
 import { OPENAI_CONFIG } from './config/openai';
 
-// Load environment variables
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
