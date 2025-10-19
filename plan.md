@@ -198,7 +198,7 @@ ai-receptionist/
 Based on the OpenAI Realtime Agents reference, we'll use the **Chat-Supervisor architecture**:
 
 ### 1. Receptionist Agent (Realtime API)
-- **Model**: `gpt-4o-realtime-mini` (cost-effective)
+- **Model**: `gpt-4o-realtime-preview-2025-06-03` (full capabilities)
 - **Purpose**: Handle real-time voice interaction
 - **Responsibilities**:
   - Greet callers naturally
@@ -475,8 +475,8 @@ import { users } from '@shared/db/schema';
 
 ## Next Steps (Phase 1)
 
-1. Create `server/` folder and package.json
-2. Set up Express server with TypeScript
+1. ~~Create empty folder structure~~ (skip - build as we go)
+2. Basic Node.js server with TypeScript and Express (with hot reload)
 3. Add OpenAI configuration (`config/openai.ts`)
 4. Create session management endpoint
 5. Implement WebSocket server for client connections
@@ -486,5 +486,7 @@ import { users } from '@shared/db/schema';
 9. Create `app/` folder for Next.js frontend
 10. Build test client for voice interaction
 11. Test full conversation flow end-to-end
+
+**Development approach:** Build step-by-step with meaningful commits. No empty folders - create files as needed.
 
 **Note:** No shared package yet - types defined locally in each package. Add shared package later in Phase 2 if needed for database schemas.
