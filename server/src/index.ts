@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
+import { OPENAI_CONFIG } from './config/openai';
 
 // Load environment variables
 dotenv.config();
@@ -27,5 +28,6 @@ app.listen(PORT, () => {
   console.log(`🚀 Server:      http://localhost:${PORT}`);
   console.log(`🏥 Health:      http://localhost:${PORT}/health`);
   console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🤖 OpenAI:      ${OPENAI_CONFIG.apiKey ? 'configured' : 'not configured'}`);
   console.log('');
 });
