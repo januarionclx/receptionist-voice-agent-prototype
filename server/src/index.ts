@@ -7,6 +7,7 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 
 // Now import the config after env vars are loaded
 import { OPENAI_CONFIG } from './config/openai';
+import sessionsRouter from './routes/sessions';
 
 
 const app = express();
@@ -14,6 +15,9 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(express.json());
+
+// Routes
+app.use('/api/sessions', sessionsRouter);
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
