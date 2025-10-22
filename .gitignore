@@ -46,6 +46,10 @@ pids/
 # Reference folder (external repos)
 reference/
 
+# Next.js app and feature examples (user's work)
+receptionist-voice-agent/
+react-new-features-examples/
+
 # Turbo
 .turbo/
 
