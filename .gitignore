@@ -46,9 +46,6 @@ pids/
 # Reference folder (external repos)
 reference/
 
-# Next.js app and feature examples (user's work)
-react-new-features-examples/
-
 # Turbo
 .turbo/
 
