@@ -449,11 +449,17 @@ import { users } from '@shared/db/schema';
 
 ### Key Documentation
 - [OpenAI Realtime API Docs](https://platform.openai.com/docs/api-reference/realtime)
+- [OpenAI Voice Agents Guide](https://platform.openai.com/docs/guides/voice-agents?voice-agent-architecture=speech-to-speech)
 - [OpenAI TypeScript SDK](https://platform.openai.com/docs/libraries/typescript-javascript-library)
 - [OpenAI Agents SDK](https://github.com/openai/openai-agents-js)
 - [Drizzle ORM Docs](https://orm.drizzle.team/docs/overview)
 - [Turso Docs](https://docs.turso.tech/)
 - [Twilio Voice Docs](https://www.twilio.com/docs/voice)
+
+### OpenAI Cookbooks & Guides
+- [OpenAI Cookbook](https://cookbook.openai.com/) - General collection of examples and guides
+- [Realtime Prompting Guide](https://cookbook.openai.com/examples/realtime_prompting_guide) - Essential guide for voice agent prompting
+- [MCP-Powered Voice Agents](https://cookbook.openai.com/examples/partners/mcp_powered_voice_agents/mcp_powered_agents_cookbook) - Advanced voice agent patterns
 
 ### OpenAI Cookbooks (see `./reference/cookbooks/`)
 - [Realtime API Prompting Guide](https://cookbook.openai.com/examples/realtime_prompting_guide)
