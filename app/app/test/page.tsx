@@ -87,10 +87,10 @@ export default function TestPage() {
                 p-3 rounded-lg border border-gray-200
                 transition-all duration-200
                 ${isConnected
-                  ? 'bg-gray-50 text-gray-400 cursor-not-allowed'
-                  : 'bg-white hover:bg-gray-50 text-gray-700 hover:border-gray-300'
+                  ? 'text-gray-400 cursor-not-allowed'
+                  : 'text-gray-700 hover:bg-gray-100 cursor-pointer'
                 }
-                focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2
+                focus:outline-none
               `}
               title={devices.find(d => d.deviceId === selectedDeviceId)?.label || 'Select microphone'}
             >
@@ -99,8 +99,8 @@ export default function TestPage() {
 
             {/* Dropdown */}
             {isDropdownOpen && !isConnected && (
-              <div className="absolute bottom-full left-0 mb-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden z-10">
-                <div className="p-2 border-b border-gray-100 bg-gray-50">
+              <div className="absolute bottom-full left-0 mb-2 w-72 bg-white rounded-lg shadow-lg overflow-hidden z-10">
+                <div className="p-3 bg-gray-50">
                   <p className="text-xs font-medium text-gray-600">Select Microphone</p>
                 </div>
                 <div className="max-h-64 overflow-y-auto">
@@ -109,7 +109,7 @@ export default function TestPage() {
                       key={device.deviceId}
                       onClick={() => handleDeviceSelect(device.deviceId)}
                       className={`
-                        w-full text-left px-4 py-3 text-sm
+                        w-full text-left px-4 py-3 text-sm cursor-pointer
                         transition-colors duration-150
                         ${device.deviceId === selectedDeviceId
                           ? 'bg-gray-100 text-gray-900 font-medium'
@@ -137,8 +137,8 @@ export default function TestPage() {
                   ? 'bg-red-500 hover:bg-red-600 text-white'
                   : 'bg-black hover:bg-gray-800 text-white'
               }
-              ${(!selectedDeviceId && !isConnected) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'}
-              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black
+              ${(!selectedDeviceId && !isConnected) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg cursor-pointer'}
+              focus:outline-none
             `}
           >
             {isConnected ? 'Disconnect' : 'Connect'}
