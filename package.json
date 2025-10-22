@@ -4,6 +4,7 @@
   "private": true,
   "description": "AI-powered receptionist using OpenAI Realtime API",
   "workspaces": [
+    "app",
     "server"
   ],
   "scripts": {
