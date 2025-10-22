@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import { createServer } from 'http';
 import dotenv from 'dotenv';
 import path from 'path';
 
@@ -8,9 +9,11 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 // Now import the config after env vars are loaded
 import { OPENAI_CONFIG } from './config/openai';
 import sessionsRouter from './routes/sessions';
+import { createWebSocketServer } from './routes/websocket';
 
 
 const app = express();
+const server = createServer(app);
 const PORT = process.env.PORT || 3001;
 
 // Middleware
@@ -28,8 +31,11 @@ app.get('/health', (req: Request, res: Response) => {
   });
 });
 
+// Create WebSocket server
+createWebSocketServer(server);
+
 // Start server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log('╔════════════════════════════════════════════════════════╗');
   console.log('║          AI Receptionist Server - Started             ║');
   console.log('╚════════════════════════════════════════════════════════╝');
