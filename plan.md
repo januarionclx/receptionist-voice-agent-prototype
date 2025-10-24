@@ -7,8 +7,12 @@
 - ✅ Root workspace configuration (`package.json`)
 - ✅ Git repository initialized
 - ✅ Reference materials in `reference/` folder (git-ignored):
-  - `reference/openai-realtime-agents/` - OpenAI's official example
-  - `reference/initial-mvp-reference/` - Initial scaffolding (for reference only)
+  - `reference/openai-realtime-agents/` - OpenAI's official example ✅ STUDIED
+  - `reference/initial-mvp-reference/` - Initial scaffolding (for reference only) ✅ STUDIED
+  - **TO BE STUDIED:**
+    - https://github.com/aurelio-labs/agents-sdk-course - Agent SDK course materials
+    - https://github.com/openai/openai-realtime-twilio-demo - Twilio integration patterns
+    - https://github.com/openai/openai-cs-agents-demo - Customer service agent patterns
 
 **What does NOT exist yet:**
 - ❌ No `app/` folder (Next.js frontend)
@@ -468,7 +472,7 @@ import { users } from '@shared/db/schema';
 
 ### Reference Implementations
 
-**OpenAI Official Example:**
+**OpenAI Official Example:** ✅ STUDIED
 - Local: `./reference/openai-realtime-agents/`
 - GitHub: https://github.com/openai/openai-realtime-agents
 - Key files to reference:
@@ -476,12 +480,29 @@ import { users } from '@shared/db/schema';
   - Session management: `src/app/api/session/route.ts`
   - Realtime connection: `src/app/hooks/useRealtimeSession.ts`
 
-**Our Initial Scaffolding (for reference):**
+**Our Initial Scaffolding (for reference):** ✅ STUDIED
 - Local: `./reference/initial-mvp-reference/`
 - Contains our first attempt at project structure
 - Use as reference while building Phase 1 from scratch
 - Files organized with config/ pattern for server
 - WebSocket implementation examples
+
+**Additional References - TO BE STUDIED:**
+
+**Aurelio Labs Agents SDK Course:**
+- GitHub: https://github.com/aurelio-labs/agents-sdk-course
+- Purpose: Comprehensive course materials on using the OpenAI Agents SDK
+- Value: May contain patterns, best practices, and advanced techniques for agent development
+
+**OpenAI Realtime Twilio Demo:**
+- GitHub: https://github.com/openai/openai-realtime-twilio-demo
+- Purpose: Official example of Twilio integration with Realtime API
+- Value: Critical for Phase 5 (Twilio Integration) - audio format conversion, PSTN handling, WebSocket patterns
+
+**OpenAI Customer Service Agents Demo:**
+- GitHub: https://github.com/openai/openai-cs-agents-demo
+- Purpose: Example implementation of customer service agents
+- Value: May contain useful patterns for receptionist workflows, escalation, state management
 
 ## Next Steps (Phase 1)
 
