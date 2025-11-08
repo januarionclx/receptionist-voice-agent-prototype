@@ -1,0 +1,19 @@
+---
+alwaysApply: true
+---
+
+# AI Receptionist - Development Rules
+
+## Commit Format
+```
+<type>(<scope>): <subject>
+```
+
+**Types:** `feat`, `fix`, `chore`, `docs`
+**Scopes:** `app`, `server`, `shared`, `config`
+
+## Rules
+- One logical change per commit
+- Commit after each feature/file
+- Use correct scope (`app`, `server`, `shared`)
+- Keep commits focused
