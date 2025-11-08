@@ -1,0 +1,14 @@
+{
+  "name": "@ai-receptionist/shared",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./lib/index.ts",
+  "types": "./lib/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
+
