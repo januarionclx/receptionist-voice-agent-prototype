@@ -5,7 +5,8 @@
   "description": "AI-powered receptionist using OpenAI Realtime API",
   "workspaces": [
     "app",
-    "server"
+    "server",
+    "shared"
   ],
   "scripts": {
     "dev": "npm run dev --workspace=server",
