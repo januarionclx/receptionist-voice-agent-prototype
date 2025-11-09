@@ -5,9 +5,7 @@
       "Bash(git clone:*)",
       "WebFetch(domain:platform.openai.com)",
       "WebFetch(domain:ai-sdk.dev)",
-      "Bash(mkdir:*)",
-      "Bash(mv:*)",
-      "Bash(git init:*)"
+      "Bash(mkdir:*)"    
     ],
     "deny": [],
     "ask": []
